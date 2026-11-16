@@ -3,12 +3,21 @@
 // Önbellek: YALNIZ uygulama kabuğu (index, giriş js/css, simgeler, manifest). Supabase'e, başka kökene ve API yollarına
 // hiç dokunulmaz. Önbellek adı her derlemede değişir (npm run build yer tutucuları doldurur: scripts/pwa-lib.mjs);
 // yeni sürüm etkinleşince "voxen-kabuk-" önekli eski önbellekler silinir.
+// DeepFilterNet (v0.29.2): /dfn/ altındaki ≈19 MB'lık dosyalar sürümden bağımsız "voxen-dfn-v3c" önbelleğinde durur
+// (her yayında yeniden inmesin). Önceden indirilmez: yalnız uygulama ilk kez istediğinde (bilgisayarda Güçlü) dolar.
 // Push: gelen bildirimi gösterir; tıklanınca açık Voxen penceresine hedefi yollar ya da yeni pencere açar.
 /* eslint-env serviceworker */
-const SURUM = "0.29.2-457d41d00e"
-const KABUK = ["/","/apple-touch-icon.png","/assets/index-C8Niy18n.js","/assets/index-nLvoYXzS.css","/favicon-okunmamis.svg","/favicon.svg","/index.html","/manifest.webmanifest","/simge-192.png","/simge-512.png"]
+const SURUM = "0.29.3-fb07d831d6"
+const KABUK = ["/","/apple-touch-icon.png","/assets/index-B4JFvLQt.js","/assets/index-nLvoYXzS.css","/favicon-okunmamis.svg","/favicon.svg","/index.html","/manifest.webmanifest","/simge-192.png","/simge-512.png"]
 const ONEK = 'voxen-kabuk-'
 const ONBELLEK = ONEK + SURUM
+const DFN_ONEK = 'voxen-dfn-'
+// DFN_SURUM hem dosya klasörü (dfn/v3c/) hem önbellek adıdır; src/voice/dfn.js DFN_SURUM ile aynı olmalı (testli).
+// Derleme değişince ikisi birlikte değişir: tarayıcının HTTP önbelleğindeki eski wasm yeni yapıştırıcıyla karışmaz.
+// v3b (v0.29.3): wasm kendi derlememiz. v3c (v0.29.3 son tur): aynı wasm, name/producers bölümleri atıldı.
+// Eski 'voxen-dfn-v3' ve 'voxen-dfn-v3b' etkinleşmede silinir.
+const DFN_SURUM = 'v3c'
+const DFN_ONBELLEK = DFN_ONEK + DFN_SURUM
 // Taban yol: kökte '/' (pages.dev), yedek adreste '/voxen/' (GitHub Pages). Kabuk listesi köke göre yazılır,
 // burada tabana taşınır.
 const TABAN = (() => { try { return new URL(self.registration.scope).pathname } catch { return '/' } })()
@@ -30,7 +39,8 @@ self.addEventListener('install', (olay) => {
 self.addEventListener('activate', (olay) => {
   olay.waitUntil(
     caches.keys()
-      .then((adlar) => Promise.all(adlar.filter((a) => a.startsWith(ONEK) && a !== ONBELLEK).map((a) => caches.delete(a))))
+      .then((adlar) => Promise.all(adlar.filter((a) => (a.startsWith(ONEK) && a !== ONBELLEK) || (a.startsWith(DFN_ONEK) && a !== DFN_ONBELLEK))
+        .map((a) => caches.delete(a))))
       .then(() => self.clients.claim()),
   )
 })
@@ -54,12 +64,22 @@ self.addEventListener('fetch', (olay) => {
     olay.respondWith(fetch(istek).catch(() => caches.match(yol('index.html')).then((y) => y || Response.error())))
     return
   }
+  if (url.pathname.startsWith(yol('dfn/'))) {
+    // DeepFilterNet dosyaları: önce ayrı önbellek; yoksa ağdan alınıp yazılır (HTML ya da hatalı cevap yazılmaz)
+    olay.respondWith(caches.open(DFN_ONBELLEK).then((c) => c.match(istek).then((y) => y || fetch(istek).then((cevap) => {
+      const tur = cevap.headers && cevap.headers.get ? cevap.headers.get('content-type') || '' : ''
+      // 15 MB'lık yazma bitene kadar SW yaşasın; kota dolarsa yutulur (bir dahaki sefer ağdan gelir)
+      if (cevap.ok && !tur.includes('text/html')) olay.waitUntil(c.put(istek, cevap.clone()).catch(() => {}))
+      return cevap
+    }))))
+    return
+  }
   if (url.pathname.startsWith(yol('assets/')) || KABUK_YOL.includes(url.pathname)) {
     // Değişmeyen dosyalar (adında özet var) ve simgeler: önce önbellek
     olay.respondWith(caches.open(ONBELLEK).then((c) => c.match(istek).then((y) => y || fetch(istek).then((cevap) => {
       // Silinmiş eski dosya _redirects yüzünden index.html (200) dönebilir: HTML önbelleğe yazılmaz
       const tur = cevap.headers && cevap.headers.get ? cevap.headers.get('content-type') || '' : ''
-      if (cevap.ok && url.pathname.startsWith(yol('assets/')) && !tur.includes('text/html')) c.put(istek, cevap.clone())
+      if (cevap.ok && url.pathname.startsWith(yol('assets/')) && !tur.includes('text/html')) olay.waitUntil(c.put(istek, cevap.clone()).catch(() => {}))
       return cevap
     }))))
   }

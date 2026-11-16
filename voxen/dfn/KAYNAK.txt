@@ -1,0 +1,46 @@
+DeepFilterNet3 dosyaları (Voxen'in "Güçlü" gürültü engellemesi, yalnız bilgisayarda)
+
+DeepFilterNet: Hendrik Schröter, https://github.com/Rikorose/DeepFilterNet
+WASM derlemesi: Voxen (resmi kaynaktan, aşağıda). Worklet: MezonAI, deepfilternet3-noise-filter 1.3.0, https://github.com/mezonai/mezon-noise-suppression
+  (worklet'teki wasm-bindgen yapıştırıcısı bizim derlemeninkiyle değiştirildi)
+Lisans: MIT ya da Apache-2.0 (bu klasördeki LICENSE-MIT ve LICENSE-APACHE)
+
+v3c/models/DeepFilterNet3_onnx.tar.gz
+  kaynak: https://raw.githubusercontent.com/Rikorose/DeepFilterNet/main/models/DeepFilterNet3_onnx.tar.gz
+  boyut: 7983136 bayt
+  sha256: c94d91f70911001c946e0fabb4aa9adc37045f45a03b56008cb0c8244cb63616
+
+v3c/pkg/df_bg.wasm  (v0.29.3: resmi kaynaktan kendimiz derledik; son turda özel bölümler atıldı)
+  kaynak: https://github.com/Rikorose/DeepFilterNet
+          commit 7b14b895fe7fc42cab72b4a4c1e49c982bd6404b (main, 2026-11-06), crate libDF (deep_filter 0.5.7-pre), özellik: wasm
+          kaynak koda dokunulmadı; yalnız Cargo.lock güncellendi (aşağıda)
+  araçlar: rustc 1.99.1, cargo 1.99.1, hedef wasm32-unknown-unknown, wasm-bindgen-cli 0.2.126
+  Cargo.lock: wasm-bindgen 0.2.126, js-sys 0.3.103, getrandom 0.2.17, futures-util 0.3.34, tract 0.21.4 (upstream'deki gibi)
+    cargo update -p wasm-bindgen --precise 0.2.126
+    cargo update -p futures-util
+    cargo update -p js-sys --precise 0.3.103
+    cargo update -p js-sys -p getrandom@0.2.14 -p console_error_panic_hook
+  derleme:
+    CARGO_BUILD_JOBS=1 RUSTFLAGS="-C target-feature=+simd128" cargo build --manifest-path libDF/Cargo.toml --lib --release --target wasm32-unknown-unknown --features wasm
+    wasm-bindgen --target web --out-dir pkg --out-name df target/wasm32-unknown-unknown/release/df.wasm
+    (wasm-opt uygulanmadı)
+  wasm-bindgen çıktısı (soyulmadan önce, v3b klasöründe yayınlanan):
+    boyut: 15066815 bayt
+    sha256: f7a7480261232a12f1114ecae746a929014843ebe09146b02a8b0f5ae40e3e38
+  özel bölümlerin atılması (v3c, şimdiki dosya):
+    node scripts/wasm-strip-custom.mjs df_bg.wasm
+    atılan: 'name' özel bölümü (4373051 bayt, hata ayıklama adları) ve 'producers' (114 bayt). Kod, veri ve
+    'target_features' bölümü olduğu gibi kaldı; sonuç WebAssembly.validate ile doğrulandı.
+  boyut: 10693650 bayt
+  sha256: 97c75325093634198e0c3471b352a4bdd2f3609cbf34294c4d7ef080e6e3cd8b
+  ham df.wasm (wasm-bindgen öncesi) sha256: e0af38b1c37dfc8013eb05cea72d450d3b5e4b8a8200fa971bc80770abf8cba1
+  wasm-bindgen'in ürettiği df.js sha256: 579b03317749cabcf1dc99f0caf009169dbec3840470e707800190d69204ca02
+    (bu yapıştırıcı src/voice/vendor/deepfilternet3/index.esm.js içindeki worklet metnine konuldu; bkz. oradaki README)
+  model wasm'ın içinde DEĞİL: wasm.rs gömülü modeli hiç kullanmadığı için bağlayıcı onu atıyor (dosyada model baytları
+  aranıp bulunamadı); df_create her zaman model baytı istiyor, bu yüzden model ayrı dosya olarak kalıyor.
+  SIMD (simd128) gerekir: Chrome 91+, Firefox 89+, Safari 16.4+.
+
+Toplam indirme (bilgisayarda Güçlü ilk açılış): 10693650 + 7983136 = 18676786 bayt (≈19 MB; soyulmadan önce ≈23 MB)
+
+Önceki durum (v0.29.2): wasm MezonAI CDN'inden (cdn.mezon.ai) alınacaktı; sunucu 403 verdi. O derleme değiştirilmiş bir
+kaynaktan (tract 0.23) yapılmış, yapıştırıcısı resmi kaynağın derlemesiyle uyuşmuyor.

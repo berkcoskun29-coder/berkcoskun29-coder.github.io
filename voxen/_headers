@@ -11,6 +11,15 @@
   Cache-Control: no-cache
   Service-Worker-Allowed: /
 
+# DeepFilterNet3 dosyaları (v0.29.2): adları sürümlü (v3c: derleme değişince klasör adı da değişir), bir hafta önbellekte kalabilir.
+# Model düz bayt olarak gitmeli: tarayıcı gzip'i kendisi açarsa DFN kurulamaz (istemci 1f 8b imzasını denetler).
+/dfn/*
+  Cache-Control: public, max-age=604800
+/dfn/v3c/pkg/df_bg.wasm
+  Content-Type: application/wasm
+/dfn/v3c/models/DeepFilterNet3_onnx.tar.gz
+  Content-Type: application/octet-stream
+
 # Uygulama bildirimi doğru içerik türüyle
 /manifest.webmanifest
   Content-Type: application/manifest+json
