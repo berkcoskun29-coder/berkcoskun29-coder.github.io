@@ -5,8 +5,8 @@
 // yeni sürüm etkinleşince "voxen-kabuk-" önekli eski önbellekler silinir.
 // Push: gelen bildirimi gösterir; tıklanınca açık Voxen penceresine hedefi yollar ya da yeni pencere açar.
 /* eslint-env serviceworker */
-const SURUM = "0.29.1-8ccd754007"
-const KABUK = ["/","/apple-touch-icon.png","/assets/index-DjePLlHm.js","/assets/index-nLvoYXzS.css","/favicon-okunmamis.svg","/favicon.svg","/index.html","/manifest.webmanifest","/simge-192.png","/simge-512.png"]
+const SURUM = "0.29.2-457d41d00e"
+const KABUK = ["/","/apple-touch-icon.png","/assets/index-C8Niy18n.js","/assets/index-nLvoYXzS.css","/favicon-okunmamis.svg","/favicon.svg","/index.html","/manifest.webmanifest","/simge-192.png","/simge-512.png"]
 const ONEK = 'voxen-kabuk-'
 const ONBELLEK = ONEK + SURUM
 // Taban yol: kökte '/' (pages.dev), yedek adreste '/voxen/' (GitHub Pages). Kabuk listesi köke göre yazılır,
