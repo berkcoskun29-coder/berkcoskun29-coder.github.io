@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Voxen logosu · L1 "Origami Tilki" (v0.26): katlanmış kâğıt tilki, çene sivri bir V -->
+  <rect width="512" height="512" rx="112" fill="#0f1a14"/>
+  <path d="M116 92 L214 192 L106 256 Z" fill="#3be37a"/>
+  <path d="M396 92 L298 192 L406 256 Z" fill="#1fa35a"/>
+  <path d="M214 192 L298 192 L256 300 Z" fill="#14532d"/>
+  <path d="M106 256 L214 192 L256 300 L256 424 Z" fill="#2fc46d"/>
+  <path d="M406 256 L298 192 L256 300 L256 424 Z" fill="#178a4c"/>
+  <path d="M172 268 L226 284 L204 304 Z" fill="#0f1a14"/>
+  <path d="M340 268 L286 284 L308 304 Z" fill="#0f1a14"/>
+  <path d="M238 398 L274 398 L256 424 Z" fill="#0f1a14"/>
+</svg>

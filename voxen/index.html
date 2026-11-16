@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- viewport-fit=cover: çentikli telefonda tam ekran (boşluklar safe-area ile verilir).
+         interactive-widget: Android'de klavye açılınca düzen küçülür, yazı kutusu klavyenin üstünde kalır. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
+    <meta name="theme-color" content="#0F1A14" />
+    <meta name="description" content="Arkadaşlarınla, reklamsız ve ücretsiz." />
+    <!-- Ana ekrana ekle (PWA, v0.24.0) -->
+    <link rel="manifest" href="/voxen/manifest.webmanifest" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Voxen" />
+    <link rel="apple-touch-icon" href="/voxen/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/voxen/favicon.svg" />
+    <title>Voxen</title>
+    <!-- v0.28.0 / v0.29.0: kayıtlı görünüm ilk boyamadan önce uygulanır (yanlış renkte bir an parlama olmasın).
+         Kayıt yoksa, tema alanı yoksa ya da Ateşböceği açıkça seçilmemişse (temaSecildi) Neon Konsol. Asıl uygulama src/gorunum.js'te; bu satır yalnız kaydı okur. -->
+    <script>(function () { var t = 'neon'; try { var r = JSON.parse(localStorage.getItem('voxen.gorunum') || '{}') || {}; if (r.tema === 'klasik' || (r.tema === 'atesbocegi' && r.temaSecildi === true)) t = r.tema } catch (e) {} document.documentElement.setAttribute('data-gorunum', t) })()</script>
+    <script type="module" crossorigin src="/voxen/assets/index-DjePLlHm.js"></script>
+    <link rel="stylesheet" crossorigin href="/voxen/assets/index-nLvoYXzS.css">
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>

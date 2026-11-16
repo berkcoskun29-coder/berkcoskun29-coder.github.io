@@ -1,0 +1,17 @@
+# Cloudflare Pages güvenlik başlıkları (npm run build bunları dist/ içine kopyalar)
+# CSP bilerek yok: Supabase (https + wss) ve WebRTC ile çakışma riski; temel başlıklar yeterli.
+# Mikrofon, kamera ve ekran paylaşımı yalnız bu site için açık.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: microphone=(self), camera=(self), display-capture=(self), geolocation=()
+
+# PWA (v0.24.0): service worker her açılışta denetlensin (yeni sürüm hemen gelsin), önbellekte bayat kalmasın
+/sw.js
+  Cache-Control: no-cache
+  Service-Worker-Allowed: /
+
+# Uygulama bildirimi doğru içerik türüyle
+/manifest.webmanifest
+  Content-Type: application/manifest+json
+  Cache-Control: no-cache
