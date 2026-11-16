@@ -7,8 +7,8 @@
 // (her yayında yeniden inmesin). Önceden indirilmez: yalnız uygulama ilk kez istediğinde (bilgisayarda Güçlü) dolar.
 // Push: gelen bildirimi gösterir; tıklanınca açık Voxen penceresine hedefi yollar ya da yeni pencere açar.
 /* eslint-env serviceworker */
-const SURUM = "0.29.3-fb07d831d6"
-const KABUK = ["/","/apple-touch-icon.png","/assets/index-B4JFvLQt.js","/assets/index-nLvoYXzS.css","/favicon-okunmamis.svg","/favicon.svg","/index.html","/manifest.webmanifest","/simge-192.png","/simge-512.png"]
+const SURUM = "0.29.4-c884e77b6b"
+const KABUK = ["/","/apple-touch-icon.png","/assets/index-CGS96zqB.js","/assets/index-R2EoYgyK.css","/favicon-okunmamis.svg","/favicon.svg","/index.html","/manifest.webmanifest","/simge-192.png","/simge-512.png"]
 const ONEK = 'voxen-kabuk-'
 const ONBELLEK = ONEK + SURUM
 const DFN_ONEK = 'voxen-dfn-'
@@ -31,9 +31,16 @@ self.addEventListener('install', (olay) => {
   olay.waitUntil(
     caches.open(ONBELLEK)
       .then((c) => c.addAll(KABUK.filter((x) => x !== '__VOXEN_KABUK__').map(yol)))
-      .catch(() => {}) // kabuk alınamazsa da kurulsun (ağdan çalışır)
-      .then(() => self.skipWaiting()),
+      .catch(() => {}), // kabuk alınamazsa da kurulsun (ağdan çalışır)
+    // v0.29.4: yeni sürüm kendiliğinden devralmaz, "waiting"de bekler; sayfa "Yeni sürüm hazır" bildirimini gösterir,
+    // kullanıcı "Yenile"ye basınca aşağıdaki iletiyle devralır (src/pwa.js swGuncellemeyiIzle). İlk kurulumda
+    // bekleyecek eski sürüm olmadığı için hemen etkinleşir.
   )
+})
+
+// Sayfadan "şimdi devral" (yalnız bu ileti; başka hiçbir şey kabul edilmez)
+self.addEventListener('message', (olay) => {
+  if (olay.data && olay.data.tur === 'voxen-skip-waiting') self.skipWaiting()
 })
 
 self.addEventListener('activate', (olay) => {
