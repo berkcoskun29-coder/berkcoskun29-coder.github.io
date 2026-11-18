@@ -7,8 +7,8 @@
 // (her yayında yeniden inmesin). Önceden indirilmez: yalnız uygulama ilk kez istediğinde (bilgisayarda Güçlü) dolar.
 // Push: gelen bildirimi gösterir; tıklanınca açık Voxen penceresine hedefi yollar ya da yeni pencere açar.
 /* eslint-env serviceworker */
-const SURUM = "0.29.6-f6f03cab24"
-const KABUK = ["/","/apple-touch-icon.png","/assets/index-4YoMP4M_.js","/assets/index-BnWvdNAF.css","/favicon-okunmamis.svg","/favicon.svg","/index.html","/manifest.webmanifest","/simge-192.png","/simge-512.png"]
+const SURUM = "0.29.7-563118d329"
+const KABUK = ["/","/apple-touch-icon.png","/assets/index-BCUTpvlt.js","/assets/index-DHj3RqhU.css","/favicon-okunmamis.svg","/favicon.svg","/index.html","/manifest.webmanifest","/simge-192.png","/simge-512.png"]
 const ONEK = 'voxen-kabuk-'
 const ONBELLEK = ONEK + SURUM
 const DFN_ONEK = 'voxen-dfn-'
