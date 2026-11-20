@@ -2,6 +2,7 @@
 <html lang="tr">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-OwgpTEPjlr7K3adAqXs3FlB9cBXvPwaxbkuv0wxFhOU=' 'wasm-unsafe-eval' blob:; style-src 'self'; img-src 'self' data: blob: https:; media-src 'self' blob: https://dutswijirapceztnduqj.supabase.co; font-src 'self'; connect-src 'self' https://dutswijirapceztnduqj.supabase.co wss://dutswijirapceztnduqj.supabase.co https://api.giphy.com; worker-src 'self'; manifest-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'" />
     <!-- viewport-fit=cover: full screen on a notched phone (the gaps are given by safe-area).
          interactive-widget: on Android the layout shrinks when the keyboard opens, the text box stays above the keyboard. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
@@ -19,8 +20,8 @@
     <!-- v0.28.0 / v0.29.0: the saved appearance is applied before the first paint (so there is no flash of the wrong color).
          Neon Console when there is no saved value, no theme field, or Firefly was not explicitly chosen (temaSecildi). The real work is in src/appearance.js; this line only reads the saved value. -->
     <script>(function () { var t = 'neon'; try { var r = JSON.parse(localStorage.getItem('voxen.gorunum') || '{}') || {}; if (r.tema === 'klasik' || (r.tema === 'atesbocegi' && r.temaSecildi === true)) t = r.tema } catch (e) {} document.documentElement.setAttribute('data-gorunum', t) })()</script>
-    <script type="module" crossorigin src="/voxen/assets/index-CaF50-wX.js"></script>
-    <link rel="stylesheet" crossorigin href="/voxen/assets/index-DHj3RqhU.css">
+    <script type="module" crossorigin src="/voxen/assets/index-BAIF6xjZ.js"></script>
+    <link rel="stylesheet" crossorigin href="/voxen/assets/index-DpMJ9WPQ.css">
   </head>
   <body>
     <div id="app"></div>

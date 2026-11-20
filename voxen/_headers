@@ -1,7 +1,11 @@
-# Cloudflare Pages güvenlik başlıkları (npm run build bunları dist/ içine kopyalar)
-# CSP bilerek yok: Supabase (https + wss) ve WebRTC ile çakışma riski; temel başlıklar yeterli.
-# Mikrofon, kamera ve ekran paylaşımı yalnız bu site için açık.
+# Cloudflare Pages security headers (npm run build copies this file into dist/).
+# The main Content-Security-Policy is a <meta> tag in the built index.html (scripts/csp-lib.mjs), because the
+# GitHub Pages mirror cannot send headers. Only header-only protections are here: framing is forbidden
+# (frame-ancestors is ignored in a meta tag; X-Frame-Options for old browsers).
+# Microphone, camera and screen sharing are allowed for this site only.
 /*
+  Content-Security-Policy: frame-ancestors 'none'
+  X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: microphone=(self), camera=(self), display-capture=(self), geolocation=()
